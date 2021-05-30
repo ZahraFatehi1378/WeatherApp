@@ -1,6 +1,5 @@
 package com.example.weatherapp.ui.day;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -49,7 +48,6 @@ public class Sun extends View {
 
     private void makeSunBigger(Canvas canvas) {
         paint.setColor(sunColor);
-        System.out.println(sunCircles.size());
         for (SunCircle sunCircle : sunCircles) {
             paint.setAlpha(sunCircle.getAlpha());
             canvas.drawCircle(sunCircle.getX(), sunCircle.getY(), sunCircle.getR()  / sunRadius, paint);
