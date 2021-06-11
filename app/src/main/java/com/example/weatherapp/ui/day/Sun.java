@@ -64,7 +64,7 @@ public class Sun extends View {
         while (iterator.hasNext()) {
             SunCircle circle = iterator.next();
             circle.setAlpha(255 - (int) ((float) (System.currentTimeMillis() - circle.getCreatedTime()) * 255 / circleLifeTime));
-            circle.setR(sunRadius + ((float) (System.currentTimeMillis() - circle.getCreatedTime()) * circleRadius / (2 * circleLifeTime)));
+            circle.setR( (2*sunRadius + ((float) (System.currentTimeMillis() - circle.getCreatedTime()) * circleRadius / (2 * circleLifeTime))));
             if (circle.getAlpha() <= 5 || circle.getR() >= circleRadius) {
                 iterator.remove();
             }

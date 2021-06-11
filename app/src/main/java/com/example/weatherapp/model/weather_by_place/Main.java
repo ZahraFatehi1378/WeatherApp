@@ -1,4 +1,4 @@
-package com.example.weatherapp.model;
+package com.example.weatherapp.model.weather_by_place;
 
 public class Main {
     private double temp;

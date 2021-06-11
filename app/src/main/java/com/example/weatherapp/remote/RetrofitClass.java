@@ -17,6 +17,6 @@ public class RetrofitClass {
                     .build();
         }
 
-        return  retrofit;
+        return retrofit;
     }
 }
