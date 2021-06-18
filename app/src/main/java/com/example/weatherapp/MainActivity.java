@@ -2,16 +2,28 @@ package com.example.weatherapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.weatherapp.model.view_models.WeatherByLocationViewModel;
+import com.example.weatherapp.model.weather_by_location.Daily;
 import com.example.weatherapp.remote.APIService;
 import com.example.weatherapp.remote.RetrofitClass;
 import com.example.weatherapp.ui.day.Sun;
 import com.example.weatherapp.ui.night.SpiralView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -19,61 +31,57 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    CompositeDisposable compositeDisposable;
-    private String url = "https://samples.openweathermap.org/data/2.5/";
-    private String url1 = "https://api.openweathermap.org/data/2.5/";
-    private APIService request;
-    private APIService request1;
+    private RecyclerView recyclerView;
     private TextView city, temp, status;
     private ConstraintLayout bg;
-    private double lat, lon;
-
+    private List<Daily> futureDays;
+    private RecyclerAdaptor recyclerAdaptor;
+    private ImageView imageView;
 
     @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
 
         init();
-        compositeDisposable.add(request1.getWeatherByPlaceModel("tehran", "332c0626ca316418dac6748b502c05e4")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(weatherModel -> {
-                    city.setText(weatherModel.getName());
-                    status.setText(weatherModel.getWeather().get(0).getMain());
-                    double tempValue = weatherModel.getMain().getTemp() - 273.15;
-                    temp.setText(String.format("%.2f", tempValue));
-                    lat = weatherModel.getCoord().getLat();
-                    lon = weatherModel.getCoord().getLon();
+        WeatherByLocationViewModel viewModel = new ViewModelProvider(this).get(WeatherByLocationViewModel.class);
 
-                    compositeDisposable.add(request.getWeatherByLocation(lat, lon, "minutely,alerts,hourly", "332c0626ca316418dac6748b502c05e4")
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(weatherByLocationModel -> {
-                                System.out.println(weatherByLocationModel.getDaily().get(0).getWeather().get(0).getMain());
-                            }));
-                }));
+        viewModel.getWeatherByPlaceModel("tehran", "332c0626ca316418dac6748b502c05e4")
+                .observe(this, weatherByPlaceNameModel -> {
+                    city.setText(weatherByPlaceNameModel.getName());
+
+
+                    viewModel.getWeatherByLocationModel(weatherByPlaceNameModel.getCoord().getLon(), weatherByPlaceNameModel.getCoord().getLat(), "minutely,alerts,hourly", "332c0626ca316418dac6748b502c05e4")
+                            .observe(this, weatherByLocationModel -> {
+                                status.setText(weatherByLocationModel.getCurrent().getWeather().get(0).getDescription());
+                                setIcon(weatherByLocationModel.getCurrent().getWeather().get(0).getDescription());
+                                double tempValue = weatherByLocationModel.getCurrent().getTemp() - 273.15;
+                                temp.setText(String.format("%.2f", tempValue) + "ºc");
+
+                                futureDays.clear();
+                                futureDays.addAll(weatherByLocationModel.getDaily());
+                                recyclerAdaptor.notifyDataSetChanged();
+                            });
+
+                });
 
         setBG("d", bg);
 
     }
 
     private void init() {
-        request = RetrofitClass.getApi(url1).create(APIService.class);
-        request1 = RetrofitClass.getApi(url).create(APIService.class);
-        compositeDisposable = new CompositeDisposable();
         bg = findViewById(R.id.bg);
         city = findViewById(R.id.city);
         temp = findViewById(R.id.temp);
         status = findViewById(R.id.status);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.clear();
+        imageView = findViewById(R.id.mainState);
+        recyclerView = findViewById(R.id.recycler);
+        futureDays = new ArrayList<>();
+        recyclerAdaptor = new RecyclerAdaptor(futureDays, this);
+        recyclerView.setAdapter(recyclerAdaptor);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
     }
 
 
@@ -97,5 +105,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setIcon(String description) {
+        switch (description) {
+            case "clear sky":
+                imageView.setImageResource(R.drawable.sun);
+                break;
+            case "few clouds ":
+                imageView.setImageResource(R.drawable.cloud);
+                break;
+            case "scattered clouds":
+                imageView.setImageResource(R.drawable.cloud);
+                break;
+            case "broken clouds":
+                imageView.setImageResource(R.drawable.cloud);
+                break;
+            case "shower rain":
+                imageView.setImageResource(R.drawable.rain);
+                break;
+            case "rain ":
+                imageView.setImageResource(R.drawable.rain);
+                break;
+            case "thunderstorm ":
+                imageView.setImageResource(R.drawable.thunderstorm);
+                break;
+            case "snow":
+                imageView.setImageResource(R.drawable.snow);
+                break;
+            case "mist":
+                imageView.setImageResource(R.drawable.mist);
+                break;
+        }
+        imageView.setColorFilter(Color.WHITE);
+    }
 }

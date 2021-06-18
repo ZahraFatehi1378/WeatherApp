@@ -8,12 +8,15 @@ public class Daily {
     private Long sunrise;
     private Long sunset;
     private List<Weather> weather;
+    private Temp temp;
 
-    public Daily(Long sunrise, Long sunset, List<Weather> weather) {
+    public Daily(Long sunrise, Long sunset, List<Weather> weather, Temp temp) {
         this.sunrise = sunrise;
         this.sunset = sunset;
         this.weather = weather;
+        this.temp = temp;
     }
+
 
     public Long getSunrise() {
         return sunrise;
@@ -25,5 +28,9 @@ public class Daily {
 
     public List<Weather> getWeather() {
         return weather;
+    }
+
+    public Temp getTemp() {
+        return temp;
     }
 }

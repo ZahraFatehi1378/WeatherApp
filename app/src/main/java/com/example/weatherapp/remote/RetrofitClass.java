@@ -7,16 +7,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClass {
 
     private static Retrofit retrofit = null;
-    public static Retrofit getApi(String URL){
+
+    public static Retrofit getRetrofit(){
 
         if (retrofit == null){
             retrofit = new Retrofit.Builder()
-                    .baseUrl(URL)
+                    .baseUrl("https://api.openweathermap.org/data/2.5/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                     .build();
         }
-
         return retrofit;
     }
 }
