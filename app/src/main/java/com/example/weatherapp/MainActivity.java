@@ -51,10 +51,9 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getWeatherByPlaceModel("tehran", "332c0626ca316418dac6748b502c05e4")
                 .observe(this, weatherByPlaceNameModel -> {
                     city.setText(weatherByPlaceNameModel.getName());
-
-
-                    viewModel.getWeatherByLocationModel(weatherByPlaceNameModel.getCoord().getLon(), weatherByPlaceNameModel.getCoord().getLat(), "minutely,alerts,hourly", "332c0626ca316418dac6748b502c05e4")
+                    viewModel.getWeatherByLocationModel( weatherByPlaceNameModel.getCoord().getLat(),weatherByPlaceNameModel.getCoord().getLon(), "minutely,alerts,hourly", "332c0626ca316418dac6748b502c05e4")
                             .observe(this, weatherByLocationModel -> {
+                                System.out.println(weatherByLocationModel.getCurrent().getTemp());
                                 status.setText(weatherByLocationModel.getCurrent().getWeather().get(0).getDescription());
                                 setIcon(weatherByLocationModel.getCurrent().getWeather().get(0).getDescription());
                                 double tempValue = weatherByLocationModel.getCurrent().getTemp() - 273.15;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                                 futureDays.addAll(weatherByLocationModel.getDaily());
                                 recyclerAdaptor.notifyDataSetChanged();
                             });
-
                 });
 
         setBG("d", bg);
@@ -107,35 +105,27 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private void setIcon(String description) {
-        switch (description) {
-            case "clear sky":
-                imageView.setImageResource(R.drawable.sun);
-                break;
-            case "few clouds ":
-                imageView.setImageResource(R.drawable.cloud);
-                break;
-            case "scattered clouds":
-                imageView.setImageResource(R.drawable.cloud);
-                break;
-            case "broken clouds":
-                imageView.setImageResource(R.drawable.cloud);
-                break;
-            case "shower rain":
-                imageView.setImageResource(R.drawable.rain);
-                break;
-            case "rain ":
-                imageView.setImageResource(R.drawable.rain);
-                break;
-            case "thunderstorm ":
-                imageView.setImageResource(R.drawable.thunderstorm);
-                break;
-            case "snow":
-                imageView.setImageResource(R.drawable.snow);
-                break;
-            case "mist":
-                imageView.setImageResource(R.drawable.mist);
-                break;
+
+        if (description.contains("clear sky")) {
+            imageView.setImageResource(R.drawable.sun);
+        } else if (description.contains("few clouds")) {
+            imageView.setImageResource(R.drawable.cloud);
+        } else if (description.contains("scattered clouds")) {
+            imageView.setImageResource(R.drawable.cloud);
+        } else if (description.contains("broken clouds")) {
+            imageView.setImageResource(R.drawable.cloud);
+        } else if (description.contains("shower rain")) {
+            imageView.setImageResource(R.drawable.rain);
+        } else if (description.contains("rain")) {
+            imageView.setImageResource(R.drawable.rain);
+        } else if (description.contains("thunderstorm")) {
+            imageView.setImageResource(R.drawable.thunderstorm);
+        } else if (description.contains("snow")) {
+            imageView.setImageResource(R.drawable.snow);
+        } else if (description.contains("mist")) {
+            imageView.setImageResource(R.drawable.mist);
         }
+
         imageView.setColorFilter(Color.WHITE);
     }
 }

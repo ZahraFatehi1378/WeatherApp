@@ -34,33 +34,41 @@ public class RecyclerAdaptor extends RecyclerView.Adapter<RecyclerAdaptor.holder
     @Override
     public holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.item_layout , parent ,false);
+        View view = layoutInflater.inflate(R.layout.item_layout, parent, false);
         return new holder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull holder holder, int position) {
-        double tempValue = arrayList.get(position).getTemp().getMax()- 273.15;
-        holder.maxTemp.setText(String.format("%.0f", tempValue)+"ºc");
+        double tempValue = arrayList.get(position).getTemp().getMax() - 273.15;
+        holder.maxTemp.setText(String.format("%.0f", tempValue) + "ºc");
 //        tempValue = arrayList.get(position).getTemp().getMin()- 273.15;
 //        holder.minTemp.setText(String.format("%.0f", tempValue)+"ºc");
         holder.minTemp.setText(arrayList.get(position).getWeather().get(0).getMain());
-        setIcon(arrayList.get(position).getWeather().get(0).getDescription() , holder);
+        setIcon(arrayList.get(position).getWeather().get(0).getDescription(), holder);
 
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void setIcon(String description, holder holder){
-        switch (description){
-            case "clear sky":holder.imageView.setImageResource(R.drawable.sun); break;
-            case "few clouds":holder.imageView.setImageResource(R.drawable.cloud);break;
-            case "scattered clouds":holder.imageView.setImageResource( R.drawable.cloud);break;
-            case "broken clouds":holder.imageView.setImageResource( R.drawable.cloud);break;
-            case "shower rain":holder.imageView.setImageResource(R.drawable.rain);break;
-            case "rain": holder.imageView.setImageResource( R.drawable.rain);break;
-            case "thunderstorm ":holder.imageView.setImageResource(R.drawable.thunderstorm);break;
-            case "snow":holder.imageView.setImageResource(R.drawable.snow);break;
-            case "mist":holder.imageView.setImageResource(R.drawable.mist);break;
+    private void setIcon(String description, holder holder) {
+        if (description.contains("clear sky")) {
+            holder.imageView.setImageResource(R.drawable.sun);
+        } else if (description.contains("few clouds")) {
+            holder.imageView.setImageResource(R.drawable.cloud);
+        } else if (description.contains("scattered clouds")) {
+            holder.imageView.setImageResource(R.drawable.cloud);
+        } else if (description.contains("broken clouds")) {
+            holder.imageView.setImageResource(R.drawable.cloud);
+        } else if (description.contains("shower rain")) {
+            holder.imageView.setImageResource(R.drawable.rain);
+        } else if (description.contains("rain")) {
+            holder.imageView.setImageResource(R.drawable.rain);
+        } else if (description.contains("thunderstorm")) {
+            holder.imageView.setImageResource(R.drawable.thunderstorm);
+        } else if (description.contains("snow")) {
+            holder.imageView.setImageResource(R.drawable.snow);
+        } else if (description.contains("mist")) {
+            holder.imageView.setImageResource(R.drawable.mist);
         }
         holder.imageView.setColorFilter(Color.WHITE);
     }
@@ -70,10 +78,11 @@ public class RecyclerAdaptor extends RecyclerView.Adapter<RecyclerAdaptor.holder
         return arrayList.size();
     }
 
-    public class holder extends RecyclerView.ViewHolder{
-        private TextView maxTemp ;
+    public class holder extends RecyclerView.ViewHolder {
+        private TextView maxTemp;
         private TextView minTemp;
         private ImageView imageView;
+
         public holder(@NonNull View itemView) {
             super(itemView);
             maxTemp = itemView.findViewById(R.id.textView);
