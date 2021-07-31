@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="250dp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_row">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="enter city name"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:textSize="20sp"
+        android:textColorHint="?colorPrimaryDark"
+        android:id="@+id/city_name"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="cancel"
+            android:textSize="20sp"
+            android:id="@+id/cancel"
+            android:textColor="?colorPrimaryDark"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="done"
+            android:textSize="20sp"
+            android:id="@+id/done"
+            android:textColor="?colorPrimaryDark"/>
+    </LinearLayout>
+
+</LinearLayout>

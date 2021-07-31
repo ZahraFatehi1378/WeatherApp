@@ -1,0 +1,50 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <!-- bright application theme. -->
+
+    <style name="AppThemeNoActionBArBright" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorBtn</item>
+        <item name="colorOnSecondary">@color/colorBtnGradient</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="itemBackground">@color/colorDrawer</item>
+        <item name="colorSurface">@color/colorHeader</item>
+        <item name="android:textColorTertiary">@color/colorBtn</item>
+        <item name="colorError">@color/floatingButton</item>
+        <item name="colorButtonNormal">@color/background</item>
+        <item name="colorOnPrimary">@color/item_bg_color</item>
+        <item name="hintTextColor">@color/hint_txt_color</item>
+        <item name="colorBackgroundFloating">@color/colorPrimaryDark</item>
+
+    </style>
+
+    <!-- dark application theme. -->
+    <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary2</item>
+        <item name="colorPrimaryDark">@color/mediaHeader2</item>
+        <item name="colorAccent">@color/colorAccent2</item>
+        <item name="colorSecondary">@color/colorBtn2</item>
+        <item name="colorOnSecondary">@color/colorBtn2</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="itemBackground">@color/colorDrawer2</item>
+        <item name="colorSurface">@color/colorHeader2</item>
+        <item name="android:textColorTertiary">@color/mediaHeader2</item>
+        <item name="colorError">@color/floatingButton2</item>
+        <item name="colorButtonNormal">@color/background2</item>
+        <item name="colorOnPrimary">@color/colorBtn2</item>
+        <item name="colorBackgroundFloating">@color/background</item>
+        <item name="hintTextColor">@color/hint_txt_color2</item>
+    </style>
+
+</resources>
+
+
+
+

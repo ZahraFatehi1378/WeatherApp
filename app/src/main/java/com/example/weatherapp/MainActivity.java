@@ -1,5 +1,6 @@
 package com.example.weatherapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModel;
@@ -10,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.weatherapp.dialog.CustomDialog;
 import com.example.weatherapp.model.view_models.WeatherByLocationViewModel;
 import com.example.weatherapp.model.weather_by_location.Daily;
 import com.example.weatherapp.remote.APIService;
@@ -23,6 +26,8 @@ import com.example.weatherapp.ui.day.Sun;
 import com.example.weatherapp.ui.night.SpiralView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -37,21 +42,32 @@ public class MainActivity extends AppCompatActivity {
     private List<Daily> futureDays;
     private RecyclerAdaptor recyclerAdaptor;
     private ImageView imageView;
+    private ImageView theme, setting;
+    private SharedPreferencesClass sharedPreferencesClass;
+
 
     @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
+        sharedPreferencesClass = new SharedPreferencesClass();
+        sharedPreferencesClass.getThemeOnMainActivityCreate(this);
+        Utils.onActivityCreateThemeForMainActivity(this);
 
         init();
-        WeatherByLocationViewModel viewModel = new ViewModelProvider(this).get(WeatherByLocationViewModel.class);
+        sendRequest("tehran");
+        setBG(bg);
 
-        viewModel.getWeatherByPlaceModel("tehran", "332c0626ca316418dac6748b502c05e4")
+    }
+
+    private void sendRequest( String cityName){
+        WeatherByLocationViewModel viewModel = new ViewModelProvider(this).get(WeatherByLocationViewModel.class);
+        viewModel.getWeatherByPlaceModel(cityName, "332c0626ca316418dac6748b502c05e4")
                 .observe(this, weatherByPlaceNameModel -> {
                     city.setText(weatherByPlaceNameModel.getName());
-                    viewModel.getWeatherByLocationModel( weatherByPlaceNameModel.getCoord().getLat(),weatherByPlaceNameModel.getCoord().getLon(), "minutely,alerts,hourly", "332c0626ca316418dac6748b502c05e4")
+                    viewModel.getWeatherByLocationModel(weatherByPlaceNameModel.getCoord().getLat(), weatherByPlaceNameModel.getCoord().getLon(), "minutely,alerts,hourly", "332c0626ca316418dac6748b502c05e4")
                             .observe(this, weatherByLocationModel -> {
                                 System.out.println(weatherByLocationModel.getCurrent().getTemp());
                                 status.setText(weatherByLocationModel.getCurrent().getWeather().get(0).getDescription());
@@ -61,12 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
                                 futureDays.clear();
                                 futureDays.addAll(weatherByLocationModel.getDaily());
+                                //     Collections.reverse(futureDays);
                                 recyclerAdaptor.notifyDataSetChanged();
                             });
                 });
-
-        setBG("d", bg);
-
     }
 
     private void init() {
@@ -76,19 +90,28 @@ public class MainActivity extends AppCompatActivity {
         status = findViewById(R.id.status);
         imageView = findViewById(R.id.mainState);
         recyclerView = findViewById(R.id.recycler);
+        theme = findViewById(R.id.theme);
+        setting = findViewById(R.id.setting);
         futureDays = new ArrayList<>();
         recyclerAdaptor = new RecyclerAdaptor(futureDays, this);
         recyclerView.setAdapter(recyclerAdaptor);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        addListener();
     }
 
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void setBG(String state, ConstraintLayout bg) {
+    private void setBG(ConstraintLayout bg) {
+        if (Utils.sTheme.equals("dark")) {
+            theme.setImageResource(R.drawable.ic_sun);
+        } else {
+            theme.setImageResource(R.drawable.ic_night_mode);
+        }
+
         Sun sun = findViewById(R.id.sun);
         SpiralView spiralView2 = findViewById(R.id.spiralView2);
 
-        if (state.equals("d")) {
+        if (Utils.sTheme.equals("dark")) {
             bg.setBackground(getResources().getDrawable(R.drawable.day));
             sun.setVisibility(View.VISIBLE);
             spiralView2.setVisibility(View.GONE);
@@ -103,6 +126,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void addListener() {
+        theme.setOnClickListener(v -> {
+            if (Utils.sTheme.equals("bright")) {
+                changeThemeToDark();
+            } else if (Utils.sTheme.equals("dark")) {
+                changeThemeToBright();
+            }
+        });
+
+        setting.setOnClickListener(v -> {
+            CustomDialog customDialog = new CustomDialog(new CustomDialog.OnSaveListener() {
+                @Override
+                public void saved(String cityName) {
+                    sendRequest(cityName);
+                }
+            });
+            customDialog.showDialog(MainActivity.this);
+
+        });
+
+    }
+
+    private void changeThemeToDark() {
+        Utils.changeToTheme(this, "dark");
+        sharedPreferencesClass.changeTheTheme(this);
+    }
+
+    private void changeThemeToBright() {
+        Utils.changeToTheme(this, "bright");
+        sharedPreferencesClass.changeTheTheme(this);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.FROYO)
     @SuppressLint("UseCompatLoadingForDrawables")
     private void setIcon(String description) {
 

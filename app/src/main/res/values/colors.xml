@@ -7,4 +7,36 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#B4A3D8</color>
+    <color name="colorPrimaryDark">#242424</color>
+    <color name="colorAccent">#9685B8</color>
+    <color name="colorButtonTxt">#FFFFFF</color>
+    <color name="colorBtn">#8874a3</color>
+    <color name="colorBtnGradient">#E2A4FF</color>
+    <color name="colorDrawer">#FCF3FF</color>
+    <color name="colorHeader">#B4A3D8</color>
+    <color name="mediaHeader">#8e44ad</color>
+    <color name="floatingButton">#E196D0</color>
+    <color name="background">#FCE9E5F1</color>
+    <color name="item_bg_color">#e4dcf1</color>
+    <color name="hint_txt_color">#4A4A4A</color>
+
+    <color name="colorPrimary2">#242424</color>
+    <color name="colorPrimaryDark2">#4A4A4A</color>
+    <color name="colorAccent2">#ffda79</color>
+    <color name="colorButtonTxt2">#FFFFFF</color>
+    <color name="colorBtn2">#f2dbb2</color>
+    <color name="colorDrawer2">#232323</color>
+    <color name="colorHeader2">#ffda79</color>
+    <color name="mediaHeader2">#f0932b</color>
+    <color name="floatingButton2">#efefef</color>
+    <color name="background2">#2f2f2f</color>
+    <color name="hint_txt_color2">#4A4A4A</color>
+
+
+    <color name="voice_bright">#e4dcf1</color>
+    <color name="voice_dark">#8874a3</color>
+    <color name="cove_deep_dark">#3d2352</color>
+
+
 </resources>
